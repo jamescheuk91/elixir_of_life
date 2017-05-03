@@ -49,8 +49,7 @@ defmodule ElixirOfLife.Web.GameChannel do
   end
 
   defp add_cells_to_current_board(params) do
-
-    {ok, board} =  BoardServer.add_cells(params |> convert_params_format)
+    {:ok, board} =  BoardServer.add_cells(params |> convert_params_format)
     board
   end
 
