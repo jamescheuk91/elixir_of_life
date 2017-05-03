@@ -1,7 +1,6 @@
 <template>
   <div class="app">
     <h1>Game Of Life {{generation}}</h1>
-
     <table class="game-board">
       <tr v-for="row in size.rows" track-by="$index">
         <td
@@ -14,6 +13,14 @@
         </td>
       </tr>
     </table>
+
+    <select v-model="selectedPattern">
+      <option value=null>Select Pattern</option>
+      <option value="blinker">Blinker</option>
+      <option value="block">Block</option>
+      <option value="acorn">Acorn</option>
+      <option value="beacon">Beacon</option>
+    </select>
   </div>
 </template>
 
@@ -23,7 +30,7 @@ import socket from "../js/socket"
 
 export default {
   data() {
-    let randomColorHex = '#'+Math.floor(Math.random()*16777215).toString(16)
+    let randomColorHex = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
     return {
       channel: null,
       userColor: randomColorHex,
@@ -32,8 +39,8 @@ export default {
         cols: 0,
         rows: 0
       },
-
-      liveCells: {}
+      liveCells: {},
+      selectedPattern: null,
     }
   },
   mounted() {
@@ -61,10 +68,10 @@ export default {
 
   methods: {
     clickCell(col, row) {
-      this.pushCells([{col: col, row: row, color: this.userColor}])
+      this.pushCell({col: col, row: row, color: this.userColor, pattern: this.selectedPattern})
     },
-    pushCells(cells) {
-      this.channel.push("add_cells", {cells: cells})
+    pushCell(params) {
+      this.channel.push("add_cells", params)
     },
     setBoardData(payload) {
       this.generation = payload.generation

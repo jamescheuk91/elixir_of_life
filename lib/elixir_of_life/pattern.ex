@@ -16,44 +16,38 @@ defmodule ElixirOfLife.Pattern do
     |> Enum.map(fn({_, x_coord}) -> {x_coord, y_coord} end)
   end
 
-  def convert_to_cells(:blinker, {origin_x, origin_y}, {size_x, size_y}) do
+  def get_cells_pattern(:blinker, {origin_x, origin_y}) do
     pattern = """
-    ....
     @@@
-    ...
     """
-    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {size_x, size_y})
+    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {3, 1})
   end
 
-  def convert_to_cells(:block, {origin_x, origin_y}, {size_x, size_y}) do
+  def get_cells_pattern(:block, {origin_x, origin_y}) do
     pattern = """
-    ....
-    .@@.
-    .@@.
-    ....
+    @@
+    @@
     """
-    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {size_x, size_y})
+    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {2, 2})
   end
 
-  def convert_to_cells(:acorn, {origin_x, origin_y}, {size_x, size_y}) do
+  def get_cells_pattern(:acorn, {origin_x, origin_y}) do
     pattern = """
     .@.....
     ...@...
     @@..@@@
     """
-    convert_to_predefined_cells_pattern(pattern, {origin_x+round(size_x/2), origin_y-round(size_y/2)}, {size_x, size_y})
+    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {7, 3})
   end
 
-  def convert_to_cells(:beacon, {origin_x, origin_y}, {size_x, size_y}) do
+  def get_cells_pattern(:beacon, {origin_x, origin_y}) do
     pattern = """
-    ......
-    .@@...
-    .@@...
-    ...@@.
-    ...@@.
-    ......
+    @@..
+    @@..
+    ..@@
+    ..@@
     """
-    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {size_x, size_y})
+    convert_to_predefined_cells_pattern(pattern, {origin_x, origin_y}, {4, 4})
   end
 
 

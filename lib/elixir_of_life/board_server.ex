@@ -21,7 +21,20 @@ defmodule ElixirOfLife.BoardServer do
 
   ## handle Server Callbacks
 
-  def handle_call({:add_cells, cells}, _from, board) do
+  def handle_call({:add_cells, %{coord: coord, color: color, pattern: nil} = cell}, _from, board) do
+    updated_board = Board.add_cells(board, [cell])
+    Logger.debug("BoardServer:add_cells: #{inspect updated_board}")
+    {:reply, {:ok, updated_board}, updated_board}
+  end
+
+
+  def handle_call({:add_cells, %{coord: coord, color: color, pattern: pattern}}, _from, board) do
+    pattern = pattern |> String.to_atom
+  
+    cells = ElixirOfLife.Pattern.get_cells_pattern(pattern, coord)
+              |> Enum.map(fn(coord) ->
+                %{coord: coord, color: color}
+              end)
     updated_board = Board.add_cells(board, cells)
     Logger.debug("BoardServer:add_cells: #{inspect updated_board}")
     {:reply, {:ok, updated_board}, updated_board}

@@ -5,7 +5,7 @@ defmodule ElixirOfLife.GenerationTickerWorker do
   use GenServer
 
   @default_name {:global, __MODULE__}
-  @default_interval_ms 5000
+  @default_interval_ms 500
 
   defstruct(
     interval: @default_interval_ms
