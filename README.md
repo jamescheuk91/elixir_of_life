@@ -24,4 +24,4 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Install Heroku Cli
   * Create Heroku app with `heroku create --buildpack "https://github.com/HashNuke/heroku-buildpack-elixir.git"`
   * Add Phoenix Static Buildpack with `heroku buildpacks:add https://github.com/gjaldon/heroku-buildpack-phoenix-static.git`
-  * `web: MIX_ENV=prod mix phoenix.server`
+  * Deploy with `git push heroku master`
