@@ -12,7 +12,7 @@ defmodule ElixirOfLife.Web.GameChannel do
 
 
   def join("game:lobby", _message, socket) do
-    message = get_current_board() |> convert_board_format
+    message = get_current_board() |> format_board_message
     {:ok, message, socket}
   end
 
@@ -22,13 +22,13 @@ defmodule ElixirOfLife.Web.GameChannel do
 
   def handle_in("add_cells", %{"col" => col, "row" => row, "color" => color, "pattern" => pattern}, socket) do
     updated_board = add_cells_to_current_board(%{col: col, row: row, color: color, pattern: pattern})
-    message = updated_board |> convert_board_format
+    message = updated_board |> format_board_message
     broadcast_board_update(updated_board)
     {:reply, {:ok, message}, socket}
   end
 
   def handle_out("board_update", %{board: board}, socket) do
-    message = board |> convert_board_format
+    message = board |> format_board_message
     push socket, "board_update", message
     {:noreply, socket}
   end
@@ -53,7 +53,7 @@ defmodule ElixirOfLife.Web.GameChannel do
     board
   end
 
-  defp convert_board_format(board) do
+  defp format_board_message(board) do
     {colsSize, rowsSize} = board.size
     alive_cells_map = board.alive_cells |> convert_to_alive_cells_map(board.alive_cell_colors)
     %{
@@ -68,7 +68,7 @@ defmodule ElixirOfLife.Web.GameChannel do
 
   defp convert_to_alive_cells_map(alive_cells, alive_cell_colors) do
     alive_cells
-    |> MapSet.to_list
+    |> MapSet.to_list()
     |> Enum.reduce(Map.new(), fn(cell, acc) ->
       {col, row} = cell
       color_hex = alive_cell_colors[cell] |> convert_rgb_to_hex
@@ -82,7 +82,7 @@ defmodule ElixirOfLife.Web.GameChannel do
 
   defp convert_params_format(%{col: col, row: row, color: color_hex, pattern: pattern}) do
     cell_coord = {col, row}
-    color_rgb = color_hex |> String.upcase |> convert_hex_to_rgb
+    color_rgb = color_hex |> String.upcase |> convert_hex_to_rgb()
     %{coord: cell_coord, color: color_rgb, pattern: pattern}
   end
 
@@ -92,9 +92,7 @@ defmodule ElixirOfLife.Web.GameChannel do
   end
 
   defp convert_rgb_to_hex(%{red: red, green: green, blue: blue}) do
-
-    rgb = %ColorUtils.RGB{red: red, green: green, blue: blue}
-
-    ColorUtils.rgb_to_hex(rgb)
+    %ColorUtils.RGB{red: red, green: green, blue: blue}
+    |> ColorUtils.rgb_to_hex()
   end
 end

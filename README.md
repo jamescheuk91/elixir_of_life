@@ -26,13 +26,10 @@ It can be scale really well.(http://www.phoenixframework.org/blog/the-road-to-2-
   * Breakdown view into more components. etc. Board, Cell, Toolbar.
   * Write test cases for GameChannel
 
-
-Live App: https://hidden-castle-76566.herokuapp.com/
-
 ## Requirements
-  * Erlang
-  * Elixir
-  * Nodejs
+  * Erlang 20.1
+  * Elixir 1.6.5
+  * Nodejs 10.7.0
 
 
 ### To start app in local:
