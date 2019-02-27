@@ -1,41 +1,53 @@
-defmodule ElixirOfLife.Mixfile do
+defmodule ElixirOfLife.Umbrella.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :elixir_of_life,
-     version: "0.0.1",
-     elixir: "~> 1.6",
-     elixirc_paths: elixirc_paths(Mix.env),
-     compilers: [:phoenix, :gettext] ++ Mix.compilers,
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      apps_path: "apps",
+      start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.json": :test
+      ]
+    ]
   end
 
-  # Configuration for the OTP application.
+  # Dependencies can be Hex packages:
   #
-  # Type `mix help compile.app` for more information.
-  def application do
-    [mod: {ElixirOfLife, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :color_utils]]
-  end
-
-  # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
-  defp elixirc_paths(_),     do: ["lib", "web"]
-
-  # Specifies your project dependencies.
+  #   {:mydep, "~> 0.3.0"}
   #
-  # Type `mix help deps` for examples and options.
+  # Or git/path repositories:
+  #
+  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
+  #
+  # Type "mix help deps" for more examples and options.
+  #
+  # Dependencies listed here are available only for this project
+  # and cannot be accessed from applications inside the apps folder
   defp deps do
     [
-      {:phoenix, "~> 1.2.1"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_html, "~> 2.6"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"},
-      {:color_utils, git: "https://github.com/ehtb/color_utils.git"}
+      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 0.8.0", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false},
+      {:distillery, "~> 2.0.9", runtime: false},
+      {:excoveralls, "~> 0.10.0", only: :test, runtime: false},
+      {:edeliver, "~> 1.6.0", runtime: false}
+    ]
+  end
+
+  defp aliases do
+    [
+      unit_test: ["ecto.create --quiet", "ecto.migrate", "test --only unit_test"],
+      controller_test: ["ecto.create --quiet", "ecto.migrate", "test --only controller_test"],
+      integration_test: ["ecto.create --quiet", "ecto.migrate", "test --only integration_test"],
+      e2e_test: ["ecto.create --quiet", "ecto.migrate", "test --only e2e_test"]
+      # sentry_recompile: ["clean", "compile"]
     ]
   end
 end

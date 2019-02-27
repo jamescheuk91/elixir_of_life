@@ -1,0 +1,29 @@
+/* This file is for your main application css. */
+
+@import "normalize";
+@import "skeleton";
+
+.app {
+  h1 {
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+.game-board {
+  margin-right: auto;
+  margin-left: auto;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background-color: #d5dae6;
+  tr {
+    height : 9px;
+  }
+  td {
+    // padding: 0;
+    border: 1px solid white;
+    width: 10px;
+  }
+}

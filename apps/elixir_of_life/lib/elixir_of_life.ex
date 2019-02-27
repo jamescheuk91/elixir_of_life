@@ -1,0 +1,2 @@
+defmodule ElixirOfLife do
+end
