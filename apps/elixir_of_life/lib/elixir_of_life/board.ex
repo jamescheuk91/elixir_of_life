@@ -68,7 +68,8 @@ defmodule ElixirOfLife.Board do
     current_alive_cells
     |> gather_target_cells
     |> Stream.map(&{&1, next_cell_state(current_alive_cells, &1)})
-    |> Stream.filter_map(fn {_cell, next_state} -> next_state == :alive end, fn {cell, _next_state} -> cell end)
+    |> Stream.filter(fn {_cell, next_state} -> next_state == :alive end)
+    |> Stream.map(fn {cell, _next_state} -> cell end)
     |> MapSet.new()
   end
 
