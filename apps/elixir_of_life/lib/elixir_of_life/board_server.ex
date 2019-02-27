@@ -6,6 +6,7 @@ defmodule ElixirOfLife.BoardServer do
   @default_name {:global, __MODULE__}
   @default_board %ElixirOfLife.Board{}
 
+  # Client
   def start_link() do
     case GenServer.start_link(__MODULE__, @default_board, name: @default_name) do
       {:ok, pid} ->
@@ -17,15 +18,33 @@ defmodule ElixirOfLife.BoardServer do
         {:ok, pid}
     end
   end
+  
+  def add_cells(cells) do
+    GenServer.call(@default_name, {:add_cells, cells})
+  end
 
-  ## handle Server Callbacks
+  def next_generation_state() do
+    GenServer.call(@default_name, :next_generation_state)
+  end
 
+  def current_board() do
+    GenServer.call(@default_name, :current_board)
+  end
+
+  ## Server Callbacks
+  @impl GenServer
+  def init(board) do
+    {:ok, board}
+  end
+
+  @impl GenServer
   def handle_call({:add_cells, %{coord: _coord, color: _color, pattern: nil} = cell}, _from, board) do
     updated_board = Board.add_cells(board, [cell])
     Logger.debug("BoardServer:add_cells: #{inspect(updated_board)}")
     {:reply, {:ok, updated_board}, updated_board}
   end
 
+  @impl GenServer
   def handle_call({:add_cells, %{coord: coord, color: color, pattern: pattern}}, _from, board) do
     pattern = pattern |> String.to_atom()
 
@@ -40,28 +59,17 @@ defmodule ElixirOfLife.BoardServer do
     {:reply, {:ok, updated_board}, updated_board}
   end
 
+  @impl GenServer
   def handle_call(:next_generation_state, _from, board) do
     updated_board = Board.next_generation(board)
     Logger.debug("BoardServer:next_generation_state: #{inspect(updated_board)}")
     {:reply, {:ok, updated_board}, updated_board}
   end
 
+  @impl GenServer
   def handle_call(:current_board, _from, board) do
     Logger.debug("BoardServer:current_board: #{inspect(board)}")
     {:reply, {:ok, board}, board}
   end
 
-  ## BoardServer API
-
-  def add_cells(cells) do
-    GenServer.call(@default_name, {:add_cells, cells})
-  end
-
-  def next_generation_state() do
-    GenServer.call(@default_name, :next_generation_state)
-  end
-
-  def current_board() do
-    GenServer.call(@default_name, :current_board)
-  end
 end
