@@ -18,7 +18,7 @@ defmodule ElixirOfLife.BoardServer do
         {:ok, pid}
     end
   end
-  
+
   def add_cells(cells) do
     GenServer.call(@default_name, {:add_cells, cells})
   end

@@ -19,12 +19,6 @@ defmodule ElixirOfLife.Application do
         type: :worker
       },
       %{
-        id: ElixirOfLife.EventWorker,
-        start: {ElixirOfLife.EventWorker, :start_link, []},
-        restart: :permanent,
-        type: :worker
-      },
-      %{
         id: ElixirOfLife.GenerationTicker,
         start: {ElixirOfLife.GenerationTicker, :start_link, []},
         restart: :permanent,
