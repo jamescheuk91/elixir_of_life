@@ -1,7 +1,6 @@
 defmodule ElixirOfLife.GenerationTicker do
   use GenServer
   require Logger
-  alias ElixirOfLife.EventWorker
   alias ElixirOfLife.GenerationTicker
 
   @default_name {:global, __MODULE__}
@@ -28,7 +27,6 @@ defmodule ElixirOfLife.GenerationTicker do
 
   def handle_call({:set_interval, new_interval}, _from, state) do
     new_state = %{state | interval: new_interval}
-    GenEvent.notify(EventWorker, {:ticker_update, new_state})
     {:reply, :ok, new_state}
   end
 
